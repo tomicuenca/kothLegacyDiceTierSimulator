@@ -39,7 +39,12 @@ public class DiceController {
         for (Dice dice: diceList){
             str.append(dice.getAmount() + "D" + dice.getFaces() + ", ");
         }
-        str.append(rolls + " rolls:");
+        str.append(rolls);
+        if(rolls == 1){
+            str.append(" roll:");
+        }else{
+            str.append(" rolls:");
+        }
         str.append(System.lineSeparator());
         str.append(System.lineSeparator());
         str.append("Min: " + min);
@@ -54,11 +59,26 @@ public class DiceController {
         str.append("Max: " + max);
         str.append(System.lineSeparator());
         str.append(System.lineSeparator());
-        str.append("Crit avg: " + critAvg);
+        if(rolls == 1){
+            str.append("Crit: ");
+        }else{
+            str.append("Crit avg: ");
+        }
+        str.append(critAvg);
         str.append(System.lineSeparator());
-        str.append("Elemental positive avg: " + elemPosAvg);
+        if(rolls == 1){
+            str.append("Elemental positive: ");
+        }else{
+            str.append("Elemental positive avg: ");
+        }
+        str.append(elemPosAvg);
         str.append(System.lineSeparator());
-        str.append("Elemental negative avg: " + elemNegAvg);
+        if(rolls == 1){
+            str.append("Elemental negative: ");
+        }else{
+            str.append("Elemental negative avg: ");
+        }
+        str.append(elemNegAvg);
         return ResponseEntity.ok(str.toString());
     }
 }
