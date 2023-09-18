@@ -137,6 +137,128 @@ public class DiceService {
     }
 
 
+    public Integer getCritElemPosAvg(List<Dice> diceList, Integer rolls){
+        List<Integer> rollList = new ArrayList<>();
+        Boolean critHit = false;
+        diceList.sort((d1, d2) -> d2.getFaces() - d1.getFaces());
+        for(int i = 0; i < rolls; i++) {
+            Integer currentValue = 0;
+            for (Dice dice : diceList) {
+                List<Integer> currentRollList = new ArrayList<>();
+                if (critHit == false) {
+                    Boolean currentHit = false;
+                    for (int j = 0; j < dice.getAmount(); j++) {
+                        if (currentHit == false) {
+                            Integer currentRoll;
+                            Integer first = dice.roll();
+                            Integer second = dice.roll();
+                            if (first > second){
+                                currentRoll = first;
+                            }
+                            else {
+                                currentRoll = second;
+                            }
+                            if (currentRoll == dice.getFaces()) {
+                                if (dice.getAmount() > 1) {
+                                    currentHit = true;
+                                } else {
+                                    critHit = true;
+                                }
+                            }
+                            currentRollList.add(currentRoll);
+                        } else {
+                            currentRollList.add(dice.getFaces());
+                            currentHit = false;
+                        }
+                    }
+                    if(currentHit == true){
+                        currentRollList.sort((d1, d2) -> d1 - d2);
+                        List<Integer> updatedCurrentRollList = new ArrayList<>();
+                        Boolean first = true;
+                        for (Integer element: currentRollList){
+                            if (first){
+                                updatedCurrentRollList.add(dice.getFaces());
+                                first = false;
+                            }
+                            else{
+                                updatedCurrentRollList.add(element);
+                            }
+                        }
+                        currentRollList = updatedCurrentRollList;
+                    }
+                    for (Integer value: currentRollList){
+                        currentValue = currentValue + value;
+                    }
+                } else {
+                    currentValue = currentValue + (dice.getAmount() * dice.getFaces());
+                }
+            }
+            rollList.add(currentValue);
+        }
+        return average(rollList);
+    }
+
+    public Integer getCritElemNegAvg(List<Dice> diceList, Integer rolls){
+        List<Integer> rollList = new ArrayList<>();
+        Boolean critHit = false;
+        diceList.sort((d1, d2) -> d2.getFaces() - d1.getFaces());
+        for(int i = 0; i < rolls; i++) {
+            Integer currentValue = 0;
+            for (Dice dice : diceList) {
+                List<Integer> currentRollList = new ArrayList<>();
+                if (critHit == false) {
+                    Boolean currentHit = false;
+                    for (int j = 0; j < dice.getAmount(); j++) {
+                        if (currentHit == false) {
+                            Integer currentRoll;
+                            Integer first = dice.roll();
+                            Integer second = dice.roll();
+                            if (first < second){
+                                currentRoll = first;
+                            }
+                            else {
+                                currentRoll = second;
+                            }
+                            if (currentRoll == dice.getFaces()) {
+                                if (dice.getAmount() > 1) {
+                                    currentHit = true;
+                                } else {
+                                    critHit = true;
+                                }
+                            }
+                            currentRollList.add(currentRoll);
+                        } else {
+                            currentRollList.add(dice.getFaces());
+                            currentHit = false;
+                        }
+                    }
+                    if(currentHit == true){
+                        currentRollList.sort((d1, d2) -> d1 - d2);
+                        List<Integer> updatedCurrentRollList = new ArrayList<>();
+                        Boolean first = true;
+                        for (Integer element: currentRollList){
+                            if (first){
+                                updatedCurrentRollList.add(dice.getFaces());
+                                first = false;
+                            }
+                            else{
+                                updatedCurrentRollList.add(element);
+                            }
+                        }
+                        currentRollList = updatedCurrentRollList;
+                    }
+                    for (Integer value: currentRollList){
+                        currentValue = currentValue + value;
+                    }
+                } else {
+                    currentValue = currentValue + (dice.getAmount() * dice.getFaces());
+                }
+            }
+            rollList.add(currentValue);
+        }
+        return average(rollList);
+    }
+
     private Integer average(List<Integer> rollList){
         Integer result = 0;
         for (Integer value: rollList){

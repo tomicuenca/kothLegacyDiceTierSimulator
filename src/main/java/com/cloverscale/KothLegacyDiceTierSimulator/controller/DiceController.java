@@ -32,6 +32,8 @@ public class DiceController {
         Integer critAvg = diceService.getCritAvg(diceList, rolls);
         Integer elemPosAvg = diceService.getElemPosAvg(diceList, rolls);
         Integer elemNegAvg = diceService.getElemNegAvg(diceList, rolls);
+        Integer critElemPosAvg = diceService.getCritElemPosAvg(diceList, rolls);
+        Integer critElemNegAvg = diceService.getCritElemNegAvg(diceList, rolls);
 
 
 
@@ -79,6 +81,21 @@ public class DiceController {
             str.append("Elemental negative avg: ");
         }
         str.append(elemNegAvg);
+        str.append(System.lineSeparator());
+        str.append(System.lineSeparator());
+        if(rolls == 1){
+            str.append("Elemental positive with crit: ");
+        }else{
+            str.append("Elemental positive with crit avg: ");
+        }
+        str.append(critElemPosAvg);
+        str.append(System.lineSeparator());
+        if(rolls == 1){
+            str.append("Elemental negative with crit: ");
+        }else{
+            str.append("Elemental negative with crit avg: ");
+        }
+        str.append(critElemNegAvg);
         return ResponseEntity.ok(str.toString());
     }
 }
