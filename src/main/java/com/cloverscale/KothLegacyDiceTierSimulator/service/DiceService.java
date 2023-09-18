@@ -40,12 +40,56 @@ public class DiceService {
         return result;
     }
     public Integer getCritAvg(List<Dice> diceList, Integer rolls){
-        Integer result = 0;
+        List<Integer> rollList = new ArrayList<>();
+        Boolean critHit = false;
         diceList.sort((d1, d2) -> d2.getFaces() - d1.getFaces());
-        for(Dice dice: diceList){
-            log.info(dice.getFaces().toString());
+        for(int i = 0; i < rolls; i++) {
+            Integer currentValue = 0;
+            for (Dice dice : diceList) {
+                List<Integer> currentRollList = new ArrayList<>();
+                if (critHit == false) {
+                    Boolean currentHit = false;
+                    for (int j = 0; j < dice.getAmount(); j++) {
+                        if (currentHit == false) {
+                            Integer currentRoll = dice.roll();
+                            if (currentRoll == dice.getFaces()) {
+                                if (dice.getAmount() > 1) {
+                                    currentHit = true;
+                                } else {
+                                    critHit = true;
+                                }
+                            }
+                            currentRollList.add(currentRoll);
+                        } else {
+                            currentRollList.add(dice.getFaces());
+                            currentHit = false;
+                        }
+                    }
+                    if(currentHit == true){
+                        currentRollList.sort((d1, d2) -> d1 - d2);
+                        List<Integer> updatedCurrentRollList = new ArrayList<>();
+                        Boolean first = true;
+                        for (Integer element: currentRollList){
+                            if (first){
+                                updatedCurrentRollList.add(dice.getFaces());
+                                first = false;
+                            }
+                            else{
+                                updatedCurrentRollList.add(element);
+                            }
+                        }
+                        currentRollList = updatedCurrentRollList;
+                    }
+                    for (Integer value: currentRollList){
+                        currentValue = currentValue + value;
+                    }
+                } else {
+                    currentValue = currentValue + (dice.getAmount() * dice.getFaces());
+                }
+            }
+            rollList.add(currentValue);
         }
-        return 0;
+        return average(rollList);
     }
     public Integer getElemPosAvg(List<Dice> diceList, Integer rolls){
         List<Integer> rollList = new ArrayList<>();
